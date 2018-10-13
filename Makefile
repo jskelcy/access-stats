@@ -11,7 +11,7 @@
     GOGET=$(GOCMD) get
     
     all: test build
-    build: 
+    build: deps
 			$(GOBUILD) -o $(OUTDIR)/$(BINARY_NAME) -v $(CMDDIR)
     test: 
 			$(GOTEST) -v ./...

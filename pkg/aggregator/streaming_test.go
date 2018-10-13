@@ -13,7 +13,7 @@ func TestParseEvent(t *testing.T) {
 	s := &streaming{
 		currBlock: types.NewBlock(),
 		reporter: report.NewReporter(report.ReporterConfig{
-			Alerter: alerts.NewAlerter(alerts.AlerterConfig{
+			Alerter: alerts.NewMovingAvgAlerter(alerts.MovingAvgAlerterConfig{
 				AlertThreshold: 100,
 				AlertWindow:    100,
 				AggWindow:      10,

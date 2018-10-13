@@ -1,0 +1,14 @@
+hash: abc88d010a18146e1c214dd68e503393ae86fb0b9c9b696cda277545f3a721df
+updated: 2018-10-09T20:24:20.001654-04:00
+imports:
+- name: github.com/fsnotify/fsnotify
+  version: ccc981bf80385c528a65fbfdd49bf2d8da22aa23
+- name: github.com/stretchr/testify
+  version: f35b8ab0b5a2cef36673838d662e249dd9c94686
+  subpackages:
+  - assert
+- name: golang.org/x/sys
+  version: 4497e2df6f9e69048a54498c7affbbec3294ad47
+  subpackages:
+  - unix
+testImports: []

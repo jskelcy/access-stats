@@ -3,6 +3,7 @@
     GLIDE=glide
 		CMDDIR=./cmd
     OUTDIR=./out
+		VENDOR=./vendor
     BINARY_NAME=access-stats
     GOBUILD=$(GOCMD) build
     GOCLEAN=$(GOCMD) clean
@@ -17,8 +18,9 @@
     clean: 
 			$(GOCLEAN)
 			rm -f $(BINARY_NAME)
+			rm -f $(VENDOR)
     run: build	
-			$(OUTDIR)/$(BINARY_NAME) -src=$(src)
+			$(OUTDIR)/$(BINARY_NAME) -src=$(src) -alertThreshold=$(alertThreshold)
     deps:
 			$(GOGET) github.com/Masterminds/glide
 			$(GLIDE) i

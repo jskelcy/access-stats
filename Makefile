@@ -4,11 +4,13 @@
 		CMDDIR=./cmd
     OUTDIR=./out
 		VENDOR=./vendor
+    SCRIPTSDIR=./scripts
     BINARY_NAME=access-stats
     GOBUILD=$(GOCMD) build
     GOCLEAN=$(GOCMD) clean
     GOTEST=$(GOCMD) test
     GOGET=$(GOCMD) get
+    GORUN=$(GOCMD) run
     
     all: test build
     build: deps
@@ -24,3 +26,5 @@
     deps:
 			$(GOGET) github.com/Masterminds/glide
 			$(GLIDE) i
+    sample-data:
+			$(GORUN) $(SCRIPTSDIR)/alert-recover.go -src=$(src)

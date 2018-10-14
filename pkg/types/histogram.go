@@ -90,7 +90,7 @@ func (h *Histogram) NPercentile(n int) []DataPoint {
 	if !h.sorted {
 		h.sort()
 	}
-	// Return an empty list for an empty histogram.
+	// Return an empty list for an empty histogram or histgram with 1 value
 	if len(h.dataPoints) == 0 || len(h.dataPoints) == 1 {
 		return []DataPoint{}
 	}

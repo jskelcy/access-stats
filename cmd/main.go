@@ -6,6 +6,7 @@ import (
 	"log"
 	"os"
 	"os/signal"
+	"strconv"
 	"syscall"
 
 	"github.com/jskelcy/access-stats/pkg/aggregator"
@@ -14,13 +15,30 @@ import (
 	"github.com/jskelcy/access-stats/pkg/report"
 )
 
+const (
+	defaultFile              = "/var/log/access.log"
+	defaultQPSAlertThreshold = "10"
+)
+
 func main() {
-	watchFile := flag.String("src", "/var/log/access.log", "file to watch for incoming logs")
-	qpsAlertThreshold := flag.Int("alertThreshold", 10, "qps where traffic is considered critical")
+	watchFile := flag.String("src", defaultFile, "file to watch for incoming logs")
+	// Parse qpsAlertThreshold as a string to play nice with make
+	qpsAlertThreshold := flag.String("alertThreshold", defaultQPSAlertThreshold, "qps where traffic is considered critical")
 	flag.Parse()
 
+	if *watchFile == "" {
+		*watchFile = defaultFile
+	}
+	if *qpsAlertThreshold == "" {
+		*qpsAlertThreshold = defaultQPSAlertThreshold
+	}
+	threshold, err := strconv.Atoi(*qpsAlertThreshold)
+	if err != nil {
+		log.Fatal(err)
+	}
+
 	alerter := alerts.NewMovingAvgAlerter(alerts.MovingAvgAlerterConfig{
-		AlertThreshold: float64(*qpsAlertThreshold),
+		AlertThreshold: float64(threshold),
 		AlertWindow:    120,
 		// Default to 10 second agg window.
 		AggWindow: 10,

@@ -20,7 +20,7 @@ const (
 type Status int
 
 // Alerter ingests values and alerts based when an alert threshold has been
-// crossed.
+// crossed. No operations are not threadsafe.
 type Alerter interface {
 	Ingest(int) (float64, Status)
 }

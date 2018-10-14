@@ -1,7 +1,6 @@
 package aggregator
 
 import (
-	"log"
 	"sync"
 	"time"
 
@@ -49,13 +48,9 @@ func (s *streaming) start(eventStream <-chan types.Event) {
 			if !ok {
 				return
 			}
-			if event.Err != nil {
-				log.Println(event.Err)
-				return
-			}
-			s.parseEvent(event)
+			go s.parseEvent(event)
 		case <-ticker.C:
-			s.flush()
+			go s.flush()
 		}
 	}
 }
@@ -74,6 +69,7 @@ func (s *streaming) parseEvent(event types.Event) {
 	s.RUnlock()
 }
 
+// Swaps out old Block with a new Block. Reports stats for old block.
 func (s *streaming) flush() {
 	s.Lock()
 	oldBlock := s.currBlock

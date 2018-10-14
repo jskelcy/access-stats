@@ -45,7 +45,7 @@ func (b *Block) Ingest(logLine string) {
 
 	b.Lock()
 	b.Total++
-	defer b.Unlock()
+	b.Unlock()
 }
 
 func (b *Block) addStatusCode(section, statusCode string) {

@@ -53,7 +53,7 @@ func (f *FileWatcher) Watch() (<-chan types.Event, error) {
 	if f.watching {
 		return nil, fmt.Errorf("Collector already watching")
 	}
-	eventChan := make(chan types.Event)
+	eventChan := make(chan types.Event, 1000)
 	go f.asyncWatch(eventChan)
 	f.watching = true
 
@@ -90,9 +90,7 @@ func (f *FileWatcher) asyncWatch(eventChan chan<- types.Event) {
 			if event.Op&fsnotify.Write == fsnotify.Write {
 				data, err := fileReader.ReadBytes('\n')
 				if err != nil {
-					eventChan <- types.Event{
-						Err: err,
-					}
+					log.Println(err)
 					f.cleanup(eventChan)
 					return
 				}

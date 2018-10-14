@@ -64,11 +64,11 @@ func (s *streaming) start(eventStream <-chan types.Event) {
 func (s *streaming) parseEvent(event types.Event) {
 	logLine := string(event.Data)
 
-	// While Ingest is a write it will get the read lock
+	// While Ingest is a write operation it will get the read lock
 	// even though all operations on a Block are threadsafe.
-	// The flush operation however switches out the currBlock, so that holds a
-	// standard Lock so Ingest calls can not be made on the currBlock until that flush
-	// has completed.
+	// The lock is required because streaming.flush switches out the currBlock,
+	// and flush calls the standard Lock. This means Ingest calls can not be made on
+	// the currBlock until flush has completed and a new block has been switched in.
 	s.RLock()
 	s.currBlock.Ingest(logLine)
 	s.RUnlock()

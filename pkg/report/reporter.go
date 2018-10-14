@@ -11,7 +11,7 @@ import (
 const (
 	highTrafficTmpl       = "*** High traffic generated an alert - hits = {%v}, triggered at {%v}\n"
 	alertingTmpl          = "*** High traffic ongoing alert - hits = {%v}\n"
-	recoveredTmpl         = "*** High traffic alert recovered - hits = {%v}, triggered at {%v}\n"
+	recoveredTmpl         = "*** High traffic alert recovered - hits = {%v}, recovered at {%v}\n"
 	maxSectionHitsTmpl    = "Highest traffic Section(s):\n"
 	max2XXSectionHitsTmpl = "Highest traffic 2XX Section(s):\n"
 	max5XXSectionHitsTmpl = "Highest traffic 5XX Section(s):\n"

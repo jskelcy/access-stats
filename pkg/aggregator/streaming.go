@@ -22,7 +22,7 @@ type StreamingConfig struct {
 }
 
 type streaming struct {
-	sync.Mutex
+	sync.RWMutex
 	currBlock *types.Block
 	reporter  report.Reporter
 }
@@ -36,7 +36,7 @@ func NewStreaming(cfg StreamingConfig) Streaming {
 }
 
 // Start calls private start in a go routine so caller does
-// not need to remember to call public start in a go rountine.
+// not need to remember to call public Start in a go rountine.
 func (s *streaming) Start(eventStream <-chan types.Event) {
 	go s.start(eventStream)
 }
@@ -51,7 +51,7 @@ func (s *streaming) start(eventStream <-chan types.Event) {
 			}
 			if event.Err != nil {
 				log.Println(event.Err)
-				break
+				return
 			}
 			s.parseEvent(event)
 		case <-ticker.C:
@@ -63,7 +63,15 @@ func (s *streaming) start(eventStream <-chan types.Event) {
 // This function is thread safe.
 func (s *streaming) parseEvent(event types.Event) {
 	logLine := string(event.Data)
+
+	// While Ingest is a write it will get the read lock
+	// even though all operations on a Block are threadsafe.
+	// The flush operation however switches out the currBlock, so that holds a
+	// standard Lock so Ingest calls can not be made on the currBlock until that flush
+	// has completed.
+	s.RLock()
 	s.currBlock.Ingest(logLine)
+	s.RUnlock()
 }
 
 func (s *streaming) flush() {

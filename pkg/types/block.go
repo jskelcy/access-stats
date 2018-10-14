@@ -32,16 +32,6 @@ func NewBlock() *Block {
 	}
 }
 
-// SectionMetrics contain metrics on:
-// 1) total hits in a section
-// 2) status codes and number of hits per status code
-// 3) users and number of hits per user
-type SectionMetrics struct {
-	TotalHits   int
-	StatusCodes map[string]int
-	Users       map[string]int
-}
-
 // Ingest parses a log line and updates Block data with
 // relevant section metrics. This function is thread safe.
 func (b *Block) Ingest(logLine string) {

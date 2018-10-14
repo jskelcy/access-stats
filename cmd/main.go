@@ -21,7 +21,7 @@ func main() {
 
 	alerter := alerts.NewMovingAvgAlerter(alerts.MovingAvgAlerterConfig{
 		AlertThreshold: float64(*qpsAlertThreshold),
-		AlertWindow:    40,
+		AlertWindow:    120,
 		// Default to 10 second agg window.
 		AggWindow: 10,
 	})

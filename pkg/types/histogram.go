@@ -66,6 +66,8 @@ func (h *Histogram) Max() []DataPoint {
 	dps := []DataPoint{
 		*h.dataPoints[len(h.dataPoints)-1],
 	}
+	// walk backwards from end of dataPoints list to capture all
+	// DataPoints which are tied for max hits.
 	for i := len(h.dataPoints) - 2; i > -1; i-- {
 		if h.dataPoints[i].Hits == dps[0].Hits {
 			dps = append(dps, *h.dataPoints[i])
@@ -95,17 +97,22 @@ func (h *Histogram) NPercentile(n int) []DataPoint {
 
 	percentilePosition := (float64(n) / float64(100)) * float64(len(h.dataPoints))
 
+	// For integer values advance percentilePosition +1
 	if percentilePosition == math.Trunc(percentilePosition) {
-		if h.dataPoints[int(percentilePosition)] != h.dataPoints[int(percentilePosition)+1] {
+		if int(percentilePosition) < len(h.dataPoints)-1 &&
+			h.dataPoints[int(percentilePosition)] != h.dataPoints[int(percentilePosition)+1] {
 			percentilePosition++
 		}
 	}
 
+	// Create copies of data points, this way if returned slice is altered it will
+	// not effect data in the histogram.
 	dpsPointers := h.dataPoints[int(math.Ceil(percentilePosition))-1:]
 	dps := make([]DataPoint, len(dpsPointers))
 	for i, dp := range dpsPointers {
 		dps[i] = *dp
 	}
+
 	return dps
 }
 

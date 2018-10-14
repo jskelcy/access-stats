@@ -3,6 +3,8 @@ package aggregator
 import (
 	"testing"
 
+	"github.com/stretchr/testify/assert"
+
 	"github.com/jskelcy/access-stats/pkg/alerts"
 
 	"github.com/jskelcy/access-stats/pkg/report"
@@ -28,6 +30,33 @@ func TestParseEvent(t *testing.T) {
 		})
 	}
 
+	assert.Equal(t, []types.DataPoint{
+		{Name: "/api/dogs", Hits: 2},
+	}, s.currBlock.HistSection.Max())
+
+	assert.Equal(t, []types.DataPoint{
+		{Name: "/api/dogs", Hits: 1},
+		{Name: "/api/cats", Hits: 1},
+		{Name: "/foo/bar", Hits: 1},
+		{Name: "/report", Hits: 1},
+	}, s.currBlock.Hist2XX.Max())
+
+	assert.Equal(t, []types.DataPoint{
+		{Name: "/api/dogs", Hits: 1},
+		{Name: "/api/fish", Hits: 1},
+		{Name: "/api/user", Hits: 1},
+	}, s.currBlock.Hist5XX.Max())
+
+	assert.Equal(t, []types.DataPoint{
+		{Name: "/api/dogs", Hits: 1},
+	}, s.currBlock.Hist5XX.NPercentile(75))
+
+	assert.Equal(t, []types.DataPoint{
+		{Name: "mary", Hits: 2},
+		{Name: "james", Hits: 2},
+	}, s.currBlock.HistUser.Max())
+
+	// Log output
 	s.flush()
 }
 

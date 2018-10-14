@@ -10,28 +10,34 @@ These instructions will get you a copy of the project up and running on your loc
 
 Go 1.11.1 or greater
 
-### Installing
+### Building and running
 
 Installing the dependecies for this project can be done via the `deps` make target.
 ```
 make deps
 ```
 
-And repeat
+Alternitivly you can use the `build` make target to build the binary in `/out` directory. When using the `build` make dependecies are also installed.
 
 ```
-until finished
+make build
 ```
 
-End with an example of getting some data out of the system or using it for a little demo
+Finally you can run install dependencies, build a binary and run the binary with the `run` make target.
 
+```
+make run
+```
 ## Running the tests
 
-Explain how to run the automated tests for this system
+Tests can be run using the `test` make target.
+
+```
+make test
+```
 
 ### Break down into end to end tests
 
-Explain what these tests test and why
 
 ```
 Give an example
@@ -48,9 +54,3 @@ Give an example
 ## Deployment
 
 Add additional notes about how to deploy this on a live system
-
-## Built With
-
-* [Dropwizard](http://www.dropwizard.io/1.0.2/docs/) - The web framework used
-* [Maven](https://maven.apache.org/) - Dependency Management
-* [ROME](https://rometools.github.io/rome/) - Used to generate RSS Feeds

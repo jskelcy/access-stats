@@ -34,6 +34,7 @@ func NewHistogram() *Histogram {
 func (h *Histogram) Add(name string, value int) {
 	h.Lock()
 	defer h.Unlock()
+
 	dp, ok := h.buckets[name]
 	if !ok {
 		dp = &DataPoint{
@@ -45,6 +46,7 @@ func (h *Histogram) Add(name string, value int) {
 	} else {
 		dp.Hits += value
 	}
+
 	h.sorted = false
 }
 

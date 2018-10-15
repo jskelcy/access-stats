@@ -55,12 +55,12 @@ func main() {
 	defer file.Close()
 
 	twoMinTimer := time.NewTicker(time.Minute * 3)
-	tenSecTimer := time.NewTicker(time.Second * 10)
+	tenSecTimer := time.NewTicker(time.Second)
 
 	for {
 		select {
 		case <-tenSecTimer.C:
-			for i := 0; i < 400; i++ {
+			for i := 0; i < 40; i++ {
 				if _, err := file.WriteString(randomLog()); err != nil {
 					log.Fatal(err)
 				}

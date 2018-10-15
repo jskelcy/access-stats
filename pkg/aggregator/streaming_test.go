@@ -57,7 +57,7 @@ func TestParseEvent(t *testing.T) {
 	}, s.currBlock.HistUser.Max())
 
 	// Log output
-	s.flush()
+	// s.flush()
 }
 
 func fixtures() [][]byte {

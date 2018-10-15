@@ -1,7 +1,7 @@
 package types
 
 import (
-	"fmt"
+	"sync"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
@@ -9,30 +9,71 @@ import (
 
 func TestHistogramMax(t *testing.T) {
 	h := NewHistogram()
-	h.Add("foo", 1)
-	h.Add("bar", 3)
-	h.Add("baz", 2)
-	h.Add("foo", 2)
+	tuples := []struct {
+		name  string
+		value int
+	}{
+		{"foo", 1},
+		{"bar", 3},
+		{"baz", 2},
+		{"foo", 2},
+	}
+	var wg sync.WaitGroup
+	for _, tuple := range tuples {
+		wg.Add(1)
+		go func(n string, v int) {
+			defer wg.Done()
+			h.Add(n, v)
+		}(tuple.name, tuple.value)
+	}
 
+	wg.Wait()
 	expected := []DataPoint{
-		{Name: "bar", Hits: 3},
-		{Name: "foo", Hits: 3},
+		{"bar", 3},
+		{"foo", 3},
 	}
 	assert.Equal(t, expected, h.Max())
 }
 
 func TestHistogramNPercentile(t *testing.T) {
 	h := NewHistogram()
-	h.Add("user1", 30)
-	h.Add("user2", 33)
-	h.Add("user3", 43)
-	h.Add("user4", 53)
-	h.Add("user5", 56)
-	h.Add("user6", 67)
-	h.Add("user7", 68)
-	h.Add("user8", 72)
-	h.Add("user9", 82)
-	h.Add("user10", 99)
+	tuples := []struct {
+		name  string
+		value int
+	}{
+		{"user1", 30},
+		{"user2", 33},
+		{"user3", 43},
+		{"user4", 53},
+		{"user5", 56},
+		{"user6", 67},
+		{"user7", 68},
+		{"user8", 72},
+		{"user9", 82},
+		{"user10", 99},
+	}
+	var wg sync.WaitGroup
+	for _, tuple := range tuples {
+		wg.Add(1)
+		go func(n string, v int) {
+			defer wg.Done()
+			h.Add(n, v)
+		}(tuple.name, tuple.value)
+	}
 
-	fmt.Println(h.NPercentile(50))
+	wg.Wait()
+	expected50th := []DataPoint{
+		{"user6", 67},
+		{"user7", 68},
+		{"user8", 72},
+		{"user9", 82},
+		{"user10", 99},
+	}
+	assert.Equal(t, expected50th, h.NPercentile(50))
+	expected75th := []DataPoint{
+		{"user8", 72},
+		{"user9", 82},
+		{"user10", 99},
+	}
+	assert.Equal(t, expected75th, h.NPercentile(75))
 }

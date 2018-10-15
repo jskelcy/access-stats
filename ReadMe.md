@@ -54,10 +54,28 @@ In order to populate a watched file with sample data a script has been provided.
 Using the default alert threshold of 10 logs per second this script should be able to generate an alert after 2 minutes. 
 
 ```
-make sample-data src=test.log
+make sample-data src=<log-file>
+```
+
+As a seperate process run access-stats using the `run` make target:
+
+```
+make run src=<log-file> alertThreshold=5
 ```
 
 
 ## Deployment
 
-Add additional notes about how to deploy this on a live system
+A docker image can be built from the docker file using the docker build command.
+
+An example might be:
+```
+docker build -t jskelcy/acces-stats:latest .
+```
+
+## Potential Improvments
+
+There are three areas where this application could be improved:
+* Access-stats does very little in the way of log validation. A basic improvment would be to handle malformed logs by emmitting some additional metirc about the number of malformed logs.
+* There are a number of properties of this app which are not configurable which could be. Those being the aggregation window, which is currently hardcoded at 10 seconds. And the alert window, which is currently hardcoded at 2 minutes. Given the logging pattern of some applications these windows may not provide the most signal so allowing users to customize these windows could allow the application to apply to a broader set of use cases.
+* When a log is ingested it is bucketed by a few predefined vectors, for example user, status code, section. These histograms are isoliated so you can get stats based on only the metrics in a specific histogram. For example you could say something like "Give me the 90th percentile of sections which go 4XX responses". However adding a more advance stat tagging system it would be interesting to support queries like "Give me the 90th percentile of sections which go 4XX responses where the callers name was Lisa". 

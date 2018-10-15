@@ -78,7 +78,7 @@ func (a *movingAvgAlerter) Ingest(value int) (float64, Status) {
 	// check above threshold
 	if avgPerSecond >= a.alertThreshold {
 		if a.alerting {
-			// Reset the counter if there is average is above threshold
+			// Reset the counter if average is above threshold
 			a.alertCounter = (a.alertWindow / a.aggWindow)
 			return avgPerSecond, Alerting
 		}

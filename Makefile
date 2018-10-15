@@ -21,8 +21,8 @@
 			$(GOTEST) -v ./...
     clean: 
 			$(GOCLEAN)
-			rm -f $(OUTDIR)
-			rm -f $(VENDOR)
+			rm -rf $(OUTDIR)
+			rm -rf $(VENDOR)
     run: build	
 			$(OUTDIR)/$(BINARY_NAME) -src=$(src) -alertThreshold=$(alertThreshold)
     deps:

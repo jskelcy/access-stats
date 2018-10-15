@@ -39,8 +39,9 @@ func main() {
 
 	alerter := alerts.NewMovingAvgAlerter(alerts.MovingAvgAlerterConfig{
 		AlertThreshold: float64(threshold),
-		AlertWindow:    120,
-		// Default to 10 second agg window.
+		// Default to 120 seconds
+		AlertWindow: 120,
+		// Default to 10 second agg window
 		AggWindow: 10,
 	})
 	reporter := report.NewReporter(report.ReporterConfig{

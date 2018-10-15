@@ -36,12 +36,10 @@ func NewBlock() *Block {
 // relevant section metrics. This function is thread safe.
 func (b *Block) Ingest(logLine string) {
 	section := getSection(logLine)
-	statusCode := getStatusCode(logLine)
-	user := getUser(logLine)
 
 	b.HistSection.Add(section, 1)
-	b.addStatusCode(section, statusCode)
-	b.HistUser.Add(user, 1)
+	b.addStatusCode(section, getStatusCode(logLine))
+	b.HistUser.Add(getUser(logLine), 1)
 
 	b.Lock()
 	b.Total++

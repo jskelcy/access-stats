@@ -9,8 +9,8 @@ import (
 )
 
 // Streaming is an aggregator which takes an event stream in the
-// form of a channel. Every 10 seconds blocks are flushed for analytics
-// and alerting.
+// form of a channel. Every 10 seconds blocks of events
+// are flushed for analytics and alerting.
 type Streaming interface {
 	Start(<-chan types.Event)
 }

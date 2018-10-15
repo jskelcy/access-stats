@@ -29,6 +29,11 @@ var (
 		"/api/user/create",
 		"/foo",
 		"/foo/bar/baz",
+		"/baz/bar",
+		"/bar",
+		"/data",
+		"/data/dog",
+		"/cool/endpoint",
 	}
 
 	statusCodes = []string{

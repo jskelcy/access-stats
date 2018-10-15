@@ -15,11 +15,13 @@
     all: test build
     build: deps
 			$(GOBUILD) -o $(OUTDIR)/$(BINARY_NAME) -v $(CMDDIR)
+    build-linux: deps
+			GOOS=linux $(GOBUILD) -o $(OUTDIR)/$(BINARY_NAME) -v $(CMDDIR)
     test: 
 			$(GOTEST) -v ./...
     clean: 
 			$(GOCLEAN)
-			rm -f $(BINARY_NAME)
+			rm -f $(OUTDIR)
 			rm -f $(VENDOR)
     run: build	
 			$(OUTDIR)/$(BINARY_NAME) -src=$(src) -alertThreshold=$(alertThreshold)
